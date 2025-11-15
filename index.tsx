@@ -1,41 +1,73 @@
 import React, { useState } from "react";
-import { View, Text, Button, Image, Alert } from "react-native";
-import * as ImagePicker from "expo-image-picker";
+import { View, Text, TextInput, Alert, Button } from "react-native";
 
-export default function Imagepicker() {
-  const [image, setImage] = useState("");
+export default function Task2() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
 
-  const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    status !== "granted"
-      ? Alert.alert("Permission Denied", "Allow gallery access")
-      : ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsEditing: true,
-          quality: 1,
-        }).then((result) => {
-          !result.canceled && setImage(result.assets[0].uri);
-        });
-  };
-
-  const takePhoto = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    status !== "granted"
-      ? Alert.alert("Permission Denied", "Allow camera access")
-      : ImagePicker.launchCameraAsync({
-          allowsEditing: true,
-          quality: 1,
-        }).then((result) => {
-          !result.canceled && setImage(result.assets[0].uri);
-        });
+  const handleSignUp = () => {
+    username && password && confirm
+      ? password === confirm
+        ? Alert.alert("Success", "Account Created")
+        : Alert.alert("Error", "Passwords do not match")
+      : Alert.alert("Error", "All fields required");
   };
 
   return (
-    <View style = {{margin : 10 , padding : 10 , marginTop : "80%" , gap : 10}} >
-      <Text style = {{fontSize : 20 , fontWeight : "bold" , textAlign : "center"}} >Image Picker Example</Text>
-      <Button title="Pick Image from Gallery" onPress={pickImage} />
-      <Button title="Take Photo from Camera" onPress={takePhoto} />
-      {image && <Image source={{ uri: image }} />}
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#f9f9f9" }}>
+      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20 }}>Sign Up</Text>
+
+      <Text style={{ alignSelf: "flex-start", marginLeft: 40, fontSize: 16 }}>Username</Text>
+      <TextInput
+        value={username}
+        onChangeText={setUsername}
+        style={{
+          width: "80%",
+          borderWidth: 1,
+          borderColor: "#aaa",
+          borderRadius: 8,
+          padding: 10,
+          marginBottom: 15,
+          backgroundColor: "#fff"
+        }}
+      />
+
+      <Text style={{ alignSelf: "flex-start", marginLeft: 40, fontSize: 16 }}>Password</Text>
+      <TextInput
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        style={{
+          width: "80%",
+          borderWidth: 1,
+          borderColor: "#aaa",
+          borderRadius: 8,
+          padding: 10,
+          marginBottom: 15,
+          backgroundColor: "#fff"
+        }}
+      />
+
+      <Text style={{ alignSelf: "flex-start", marginLeft: 40, fontSize: 16 }}>Confirm Password</Text>
+      <TextInput
+        value={confirm}
+        onChangeText={setConfirm}
+        secureTextEntry
+        style={{
+          width: "80%",
+          borderWidth: 1,
+          borderColor: "#aaa",
+          borderRadius: 8,
+          padding: 10,
+          marginBottom: 20,
+          backgroundColor: "#fff"
+        }}
+      />
+
+      <View style={{ width: "80%", borderRadius: 8, overflow: "hidden" }}>
+        <Button title="Sign Up" onPress={handleSignUp} color="#2196F3" />
+      </View>
     </View>
   );
 }
